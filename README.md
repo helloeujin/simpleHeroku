@@ -1,10 +1,4 @@
-## Heroku ExpressJS Boilerplate
-
-Boilerplate for ExpressJS
-
-* Routes directory
-* Hogan-Express template engine (w/ layouts)
-* MongoDB (coming soon)
+# Simple Heroku
 
 
 ### Getting started w/ local development server
@@ -26,17 +20,8 @@ Download and install Heroku Toolbelt <https://toolbelt.heroku.com>, this will gi
 
 4) Create Heroku app and add database
 
-	heroku create
-
-5) Add MongoLabs Starter MongoDB add on to your heroku app
-
-	heroku addons:add mongolab:starter
-
-6) Get Heroku MongoLab connection string into .env file
-
-	heroku config --shell | grep MONGOLAB_URI >> .env
-
-Your connection string to MongoDB will be in your **.env** file now.
+	heroku create 
+	(for rename: heroku rename myApp)
 
 7) Start server with **foreman start**.
 
@@ -48,23 +33,27 @@ Foreman reads your .env file, populates the process.env object for use in your a
 
 9) Stop the web server press Command+C in the Terminal window.
 
-### Auto restart development server
 
-To auto restart your development server after you make some changes to your code. Install **Nodemon**. [Nodemon](https://github.com/remy/nodemon) will watch your files and restart the server for you.
 
-Install Nodemon. In Terminal type,
+### Local development server after installing
 
-	npm install -g nodemon
+1) cd + drag folder directory
 
-There are two possible ways to use Nodemon,
+2) Start server with **foreman start**.
 
-	foreman run nodemon app.js
+	foreman start
+	
+3) Push to heroku app
+	
+	git add .
+	git commit -am 'edit'
+	git push heroku master
+	
+	(git push origin master // for github update)
+	
+4) Open heroku app
 
-Or with the helper script
-
-	. devserver
-
-The **.nodemonignore** file will ignore certain files and directories from being watched. By default and for example we're ignoring /public folder.
+	heroku open
 
 
 ### Frameworks and NodeJS
@@ -94,101 +83,6 @@ GET- a user requests a web page or resource
 	    response.send("This is the about page.");
 	});
 
-POST- a user submits a form
-
-	app.post("/the-form", function(request, response){
-	    
-	    console.log("a user has request /the-form via POST");
-	    
-	    //form processing code goes here....
-	    
-	    //send message to user
-	    response.send("okay, we'll process that right away.")
-	});
-
-
 -----
 
-#### Template Engine - Hogan-Express
-
-[Hogan Express](https://github.com/vol4ok/hogan-express)
-
-We will use Hogan-Express, Embedded JavaScript template engine to render our html on ExpressJS. Hogan-Express templates are the mainly HTML and include {{variablehere}} template tags to display dynamic data and perform simple logic and looping.  You will save these templates to a specific directory and then tell ExpressJS what that directory named **/views**. We configure Express to use Hogan-Express template engine and set the template directory **/views** with these statements.
-
-We configure ExpressJS to use Hogan-Express in two files
-
-package.json
-	
-	...
-	"dependencies": {
-	    "express": "3.0.0rc5",
-	    "hogan-express" : "0.3.3",
-	    "moment" : "1.7.2"
-  	},
-  	...
-
-app.js
-
-	...
-
-	//  templates directory
-	app.set('views', __dirname + '/views');
-
-	// setup template engine - we're using Hogan-Express
-	// https://github.com/vol4ok/hogan-express
-	app.set('view engine', 'html');
-	app.set('layout','layout');
-	app.engine('html', require('hogan-express'));
-
-	...
-
-#### Rendering templates w/ data
-
-We define our incoming routes in app.js like mentioned above.
-
-app.js
-
-	var routes = require('../routes/index.js');
-	app.get('/page1', routes.index);
-
-/routes/index.js (example,not the same as actual code in routes/index.js)
-
-	exports.index = function(req, res) {
-
-		var templateData = {
-			'title' : 'Hello World',
-			'content' : 'A Priest and a Rabbi walk into a bar...',
-			'tags' : ['bar','old','not funny']
-
-		}
-
-		res.render('joke.html', templateData);
-	}
-
-/views/joke.html
-
-	<h1>{{title}}</h1>
-	<hr>
-	<p>
-		{{content}}
-	</p>
-	<br>
-	Tagged:
-	{{#tags}}
-	<li>{{.}}</li>
-	{{/tags}}
-
-/view/layout.html
-
-Layouts allow you to have a standard header and footer for a set of pages. It is automatically enabled for this demo code to use /views/layout.html.P
-
-	<html>
-		<head>
-		<!-- meta and css stuff here -->
-		</head>
-		<body>
-			{{{ yield }}}
-		</body>
-	</html>
-
-# simpleHeroku
+More about Express.js (https://github.com/johnschimmel/Heroku-ExpressJS-Boilerplate)
